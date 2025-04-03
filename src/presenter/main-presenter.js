@@ -1,9 +1,9 @@
 import {render} from '../render';
-import EditForm from '../view/EditFormView';
-import CreateForm from '../view/CreateFormView';
-import Point from '../view/PointView';
-import Sort from '../view/SortView';
-import Filter from '../view/FilterView';
+import EditForm from '../view/edit-form-view';
+import CreateForm from '../view/create-form-view';
+import Point from '../view/point-view';
+import Sort from '../view/sort-view';
+import Filter from '../view/filter-view';
 
 
 export default class MainPresenter {
