@@ -1,4 +1,4 @@
-import {capitalizeString, getDurationTime, humanizeDate} from '../utils';
+import {capitalizeString, getDurationTime, humanizeDate} from '../utils/utils';
 import AbstractView from '../framework/view/abstract-view';
 
 function createPointTemplate(pointModel, offerModel, destinationModel) {

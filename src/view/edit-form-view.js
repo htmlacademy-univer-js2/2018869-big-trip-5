@@ -1,4 +1,4 @@
-import {capitalizeString, getOfferKeyword, humanizeDate} from '../utils';
+import {capitalizeString, getOfferKeyword, humanizeDate} from '../utils/utils';
 import AbstractView from '../framework/view/abstract-view';
 
 function createFormTemplate(pointModel, offerModel, destinationModel){
