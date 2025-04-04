@@ -1,7 +1,7 @@
-import {createElement} from '../render';
 import {capitalizeString, getOfferKeyword, humanizeDate} from '../utils';
+import AbstractView from '../framework/view/abstract-view';
 
-function createFormTemplate(pointModel, iterator){
+function createFormTemplate(pointModel, offerModel, destinationModel){
   const {
     base_price: price,
     date_from: dateFrom,
@@ -9,14 +9,14 @@ function createFormTemplate(pointModel, iterator){
     destination: destinationId,
     offers: offersId,
     type
-  } = pointModel.points[iterator];
+  } = pointModel;
 
   const pointOffers = [];
   for(const offerId of offersId){
-    pointOffers.push(pointModel.getOffersId(type, offerId));
+    pointOffers.push(offerModel.getOffersById(type, offerId));
   }
-  const allOffers = pointModel.getOffersId(type).offers;
-  const {name, description, pictures} = pointModel.getDestinationId(destinationId);
+  const allOffers = offerModel.getOffersByType(type).offers;
+  const {name, description, pictures} = destinationModel.getDestinationById(destinationId);
 
   return `
       <li class="trip-events__item">
@@ -156,24 +156,25 @@ function createFormTemplate(pointModel, iterator){
   `;
 }
 
-export default class EditForm{
-  constructor(model,i){
-    this.pointModel = model;
-    this.iterator = i;
+export default class EditForm extends AbstractView{
+  #pointModel;
+  #offerModel;
+  #destinationModel;
+  #editForm;
+  #closeButton;
+
+  constructor(pointModel, offerModel, destinationModel, onFormSubmit, onEditButtonClick) {
+    super();
+    this.#pointModel = pointModel;
+    this.#offerModel = offerModel;
+    this.#destinationModel = destinationModel;
+    this.#editForm = this.element.querySelector('.event--edit');
+    this.#editForm.addEventListener('submit', onFormSubmit);
+    this.#closeButton = this.element.querySelector('.event__rollup-btn');
+    this.#closeButton.addEventListener('click', onEditButtonClick);
   }
 
-  getTemplate() {
-    return createFormTemplate(this.pointModel, this.iterator);
-  }
-
-  getElement() {
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createFormTemplate(this.#pointModel, this.#offerModel, this.#destinationModel);
   }
 }
