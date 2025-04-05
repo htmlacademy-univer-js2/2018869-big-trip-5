@@ -3,6 +3,8 @@ import Point from '../view/point-view';
 import Sort from '../view/sort-view';
 import Filter from '../view/filter-view';
 import {render, replace} from '../framework/render';
+import {generateFilters} from '../utils/filter';
+import EmptyList from '../view/empty-list-view';
 
 
 export default class MainPresenter {
@@ -22,14 +24,18 @@ export default class MainPresenter {
 
   init(){
     const siteHeaderFiltersElement = document.querySelector('.trip-controls__filters');
-    render(new Filter(), siteHeaderFiltersElement);
+    const filter = generateFilters(this.#pointModel.points);
+    render(new Filter(filter), siteHeaderFiltersElement);
+    if (filter[0].count === 0){
+      render(new EmptyList(), this.#container);
+    } else {
+      render(new Sort(), this.#container);
 
-    render(new Sort(), this.container);
+      this.#container.appendChild(this.tripEventsList);
 
-    this.#container.appendChild(this.tripEventsList);
-
-    for (let i = 0; i < this.pointModel.getPoints().length; i++){
-      this.#renderPoint(this.pointModel.getPoints()[i]);
+      for (let i = 0; i < this.pointModel.points.length; i++){
+        this.#renderPoint(this.pointModel.points[i]);
+      }
     }
   }
 

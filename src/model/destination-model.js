@@ -3,7 +3,7 @@ import {mockDestinations} from '../mock/destination';
 export class DestinationModel {
   #destination = mockDestinations;
 
-  getDestinations() {
+  get destinations() {
     return this.#destination;
   }
 

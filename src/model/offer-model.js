@@ -3,7 +3,7 @@ import {mockOffers} from '../mock/offer';
 export class OfferModel {
   #offers = mockOffers;
 
-  getOffers() {
+  get offers() {
     return this.#offers;
   }
 
