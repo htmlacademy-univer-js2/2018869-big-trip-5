@@ -3,20 +3,20 @@ import AbstractView from '../framework/view/abstract-view';
 
 function createFormTemplate(pointModel, offerModel, destinationModel){
   const {
-    base_price: price,
-    date_from: dateFrom,
-    date_to: dateTo,
-    destination: destinationId,
-    offers: offersId,
+    price,
+    dateFrom,
+    dateTo,
+    destination,
+    offers,
     type
   } = pointModel;
 
   const pointOffers = [];
-  for(const offerId of offersId){
+  for(const offerId of offers){
     pointOffers.push(offerModel.getOffersById(type, offerId));
   }
   const allOffers = offerModel.getOffersByType(type).offers;
-  const {name, description, pictures} = destinationModel.getDestinationById(destinationId);
+  const {name, description, pictures} = destinationModel.getDestinationById(destination);
 
   return `
       <li class="trip-events__item">
