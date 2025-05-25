@@ -3,21 +3,21 @@ import AbstractView from '../framework/view/abstract-view';
 
 function createPointTemplate(pointModel, offerModel, destinationModel) {
   const {
-    base_price: price,
-    date_from: dateFrom,
-    date_to: dateTo,
-    destination: destinationId,
-    is_favorite: isFavorite,
-    offers: offersId,
+    price,
+    dateFrom,
+    dateTo,
+    destination,
+    isFavorite,
+    offers,
     type
   } = pointModel;
 
   const pointOffers = [];
-  for(const offerId of offersId){
+  for(const offerId of offers){
     pointOffers.push(offerModel.getOffersById(type, offerId));
   }
 
-  const {name} = destinationModel.getDestinationById(destinationId);
+  const {name} = destinationModel.getDestinationById(destination);
   const date = humanizeDate(dateFrom);
   return `
     <li class="trip-events__item">

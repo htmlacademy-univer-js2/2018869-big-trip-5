@@ -56,6 +56,16 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
+function sortPointByDay(pointA, pointB) {
+  return dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+}
+
+function sortPointByTime(pointA, pointB) {
+  const durationA = dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
+  const durationB = dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom));
+  return durationB - durationA;
+}
+
 export {getRandomNumber,
   humanizeDate,
   getDurationTime,
@@ -64,4 +74,7 @@ export {getRandomNumber,
   isFuturePoint,
   isPastPoint,
   isPresentPoint,
-  updateItem};
+  updateItem,
+  sortPointByDay,
+  sortPointByTime
+};
