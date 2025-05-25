@@ -108,9 +108,9 @@ const mockPoints = [
   },
   {
     'id': 10,
-    'price': getRandomNumber(10000, 500),
-    'dateFrom': '2025-04-04T04:45:14.857Z',
-    'dateTo': '2025-04-04T08:19:14.857Z',
+    'base_price': getRandomNumber(10000, 500),
+    'date_from': '2025-04-04T04:45:14.857Z',
+    'date_to': '2025-04-04T08:19:14.857Z',
     'destination': 6,
     'is_favorite': true,
     'offers': [
