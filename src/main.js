@@ -1,9 +1,42 @@
 import MainPresenter from './presenter/main-presenter';
+import FilterPresenter from './presenter/filter-presenter';
+import FilterModel from './model/filter-model';
 import {PointModel} from './model/point-model';
-import {OfferModel} from './model/offer-model';
 import {DestinationModel} from './model/destination-model';
+import {OfferModel} from './model/offer-model';
+import NewPointView from './view/new-point-view.js';
+import { render, RenderPosition } from './framework/render.js';
 
+const siteHeaderFiltersElement = document.querySelector('.trip-controls__filters');
 const siteBodySortElement = document.querySelector('.trip-events');
-const mainPresenter = new MainPresenter(siteBodySortElement, new PointModel(), new OfferModel(), new DestinationModel());
-mainPresenter.init();
+const siteHeaderElement = document.querySelector('.trip-main');
+const filterModel = new FilterModel();
+const pointModel = new PointModel();
+const offerModel = new OfferModel();
+const destinationModel = new DestinationModel();
+const filterPresenter = new FilterPresenter(
+  siteHeaderFiltersElement,
+  filterModel,
+  pointModel
+);
+const mainPresenter = new MainPresenter(
+  siteBodySortElement,
+  pointModel,
+  offerModel,
+  destinationModel,
+  filterModel,
+  onNewPointFormClose
+);
+const newPointButtonComponent = new NewPointView(onNewPointButtonClick);
 
+function onNewPointFormClose() {
+  newPointButtonComponent.element.disabled = false;
+}
+
+function onNewPointButtonClick() {
+  mainPresenter.createPoint();
+  newPointButtonComponent.element.disabled = true;
+}
+render(newPointButtonComponent,siteHeaderElement,RenderPosition.BEFOREEND);
+filterPresenter.init();
+mainPresenter.init();
