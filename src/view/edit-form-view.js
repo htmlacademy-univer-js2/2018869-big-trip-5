@@ -3,6 +3,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
+
 function createFormTemplate(state, offerModel, destinationModel, isNewPoint){
   const {
     price,
