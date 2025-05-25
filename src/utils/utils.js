@@ -52,6 +52,10 @@ function isFuturePoint(dueDate) {
   return dayjs().isBefore(dueDate, 'day');
 }
 
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 export {getRandomNumber,
   humanizeDate,
   getDurationTime,
@@ -59,4 +63,5 @@ export {getRandomNumber,
   getOfferKeyword,
   isFuturePoint,
   isPastPoint,
-  isPresentPoint};
+  isPresentPoint,
+  updateItem};
