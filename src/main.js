@@ -9,21 +9,27 @@ import { render, RenderPosition } from './framework/render.js';
 import PointsApiService from './api/point-api-service';
 import OffersApiService from './api/offer-api-service';
 import DestinationsApiService from './api/destination-api-service';
+import RoutePresenter from './presenter/route-presenter';
 
-const AUTHORIZATION = 'Basic er883jdzbdw';
+const AUTHORIZATION = 'Basic er883jdzbdw702';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 const siteHeaderFiltersElement = document.querySelector('.trip-controls__filters');
 const siteBodySortElement = document.querySelector('.trip-events');
 const siteHeaderElement = document.querySelector('.trip-main');
+
 const filterModel = new FilterModel();
 const pointModel = new PointModel(new PointsApiService(END_POINT, AUTHORIZATION));
 const offerModel = new OfferModel(new OffersApiService(END_POINT, AUTHORIZATION));
 const destinationModel = new DestinationModel(new DestinationsApiService(END_POINT, AUTHORIZATION));
+
+new RoutePresenter(siteHeaderElement, pointModel, offerModel, destinationModel);
+
 const filterPresenter = new FilterPresenter(
   siteHeaderFiltersElement,
   filterModel,
   pointModel
 );
+
 const mainPresenter = new MainPresenter(
   siteBodySortElement,
   pointModel,
