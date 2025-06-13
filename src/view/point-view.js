@@ -3,7 +3,7 @@ import AbstractView from '../framework/view/abstract-view';
 
 function createPointTemplate(pointModel, offerModel, destinationModel) {
   const {
-    price,
+    basePrice,
     dateFrom,
     dateTo,
     destination,
@@ -36,7 +36,7 @@ function createPointTemplate(pointModel, offerModel, destinationModel) {
                   <p class="event__duration">${getDurationTime(dateFrom, dateTo)}</p>
                 </div>
                 <p class="event__price">
-                  €&nbsp;<span class="event__price-value">${price}</span>
+                  €&nbsp;<span class="event__price-value">${basePrice}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
@@ -62,7 +62,7 @@ function createPointTemplate(pointModel, offerModel, destinationModel) {
   `;
 }
 
-export default class Point extends AbstractView{
+export default class PointView extends AbstractView{
   #pointModel;
   #offerModel;
   #destinationModel;

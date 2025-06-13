@@ -3,6 +3,7 @@ import {FilterType} from '../const/const';
 
 export default class FilterModel extends Observable {
   #filterType = FilterType.EVERYTHING;
+
   get filter() {
     return this.#filterType;
   }

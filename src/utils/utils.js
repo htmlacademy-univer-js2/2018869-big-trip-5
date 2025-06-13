@@ -2,10 +2,6 @@ import dayjs from 'dayjs';
 import {TimeConstants} from '../const/const';
 
 
-function getRandomNumber(max, min = 0) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 function humanizeDate(date, format = TimeConstants.FORMATS.DATE) {
   return date ? dayjs(date).format(format) : '';
 }
@@ -34,10 +30,6 @@ function getDurationTime(start, end) {
 
 function capitalizeString(word){
   return word[0].toUpperCase() + word.slice(1);
-}
-
-function getOfferKeyword(title){
-  return title.split(' ').slice(-1);
 }
 
 function isPresentPoint(dateFrom, dateTo) {
@@ -81,16 +73,23 @@ function isDatesEqual(dateA, dateB) {
   return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 }
 
-export {getRandomNumber,
+function OnEscKeyDown(evt, callback) {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    evt.preventDefault();
+    callback();
+  }
+}
+
+export {
   humanizeDate,
   getDurationTime,
   capitalizeString,
-  getOfferKeyword,
   isFuturePoint,
   isPastPoint,
   isPresentPoint,
   sortPointByDay,
   sortPointByTime,
   toCamelCase,
-  isDatesEqual
+  isDatesEqual,
+  OnEscKeyDown,
 };

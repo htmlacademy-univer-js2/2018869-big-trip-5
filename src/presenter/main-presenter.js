@@ -1,12 +1,18 @@
-import Sort from '../view/sort-view';
+import SortView from '../view/sort-view';
 import {render, RenderPosition, remove } from '../framework/render';
 import {sortPointByDay, sortPointByTime} from '../utils/utils';
-import EmptyList from '../view/empty-list-view';
+import EmptyListView from '../view/empty-list-view';
 import PointPresenter from './point-presenter';
 import {filter} from '../utils/filter';
 import NewPointPresenter from './new-point-presenter';
 import {SortType, UserAction, UpdateType, FilterType} from '../const/const';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class MainPresenter {
   #pointModel;
@@ -21,11 +27,16 @@ export default class MainPresenter {
   #actualSortType = SortType.DAY;
   #loadingComponent = new LoadingView();
   #isLoading = true;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   constructor(container,pointModel,offerModel,destinationModel, filterModel, onNewPointDestroy) {
     const tripEventsList = document.createElement('ul');
     tripEventsList.className = 'trip-events__list';
     container.appendChild(tripEventsList);
+
     this.#bigContainer = container;
     this.#listContainer = tripEventsList;
     this.#pointModel = pointModel;
@@ -56,15 +67,15 @@ export default class MainPresenter {
       return;
     }
     this.#actualSortType = changeSortType;
-    this.#clearPointList({resetRenderedPointCount:true});
+    this.#clearPointList({resetRenderedPointCount: true});
     this.#renderPoints();
   };
 
   #renderSort() {
     if (this.#sortComponent) {
-      remove(this.#sortComponent); // Удаляем старый компонент [[1]]
+      remove(this.#sortComponent);
     }
-    this.#sortComponent = new Sort({ currentSortType: this.#actualSortType, onSortTypeChange: this.#onSortTypeChange });
+    this.#sortComponent = new SortView({ currentSortType: this.#actualSortType, onSortTypeChange: this.#onSortTypeChange });
     render(this.#sortComponent, this.#bigContainer, RenderPosition.AFTERBEGIN);
   }
 
@@ -76,7 +87,7 @@ export default class MainPresenter {
 
     const pointsCount = this.points.length;
     if (pointsCount === 0) {
-      render(new EmptyList(this.#filterModel.filter), this.#listContainer, RenderPosition.AFTEREND);
+      render(new EmptyListView(this.#filterModel.filter), this.#listContainer, RenderPosition.AFTEREND);
       return;
     }
     this.#renderSort();
@@ -103,18 +114,35 @@ export default class MainPresenter {
     }
   }
 
-  #onViewAction = (actionType, updateType, update) => {
+  #onViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch(actionType){
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoints(updateType, update);
+        this.#pointsPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointModel.updatePoints(updateType, update);
+        } catch (err) {
+          this.#pointsPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoints(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoints(updateType, update);
+        } catch (err) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoints(updateType, update);
+        this.#pointsPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoints(updateType, update);
+        } catch (err) {
+          this.#pointsPresenters.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
 
@@ -161,7 +189,7 @@ export default class MainPresenter {
         filteredPoints.sort(sortPointByTime);
         break;
       case SortType.PRICE:
-        filteredPoints.sort((a,b)=>b.price - a.price);
+        filteredPoints.sort((a,b)=>b.basePrice - a.basePrice);
         break;
     }
     return filteredPoints;
