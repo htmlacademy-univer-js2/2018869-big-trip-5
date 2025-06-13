@@ -4,7 +4,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createFormTemplate(state, offerModel, destinationModel, isNewPoint){
+function createFormTemplate(state, offerModel, destinationModel, isNewPoint) {
   const {
     basePrice,
     dateFrom,
@@ -18,17 +18,17 @@ function createFormTemplate(state, offerModel, destinationModel, isNewPoint){
   } = state;
 
   const pointOffers = [];
-  for(const offerId of offers){
+  for (const offerId of offers) {
     pointOffers.push(offerModel.getOfferById(type, offerId));
   }
+
   const allOffers = offerModel.getOfferByType(type);
   const availableOfferIds = allOffers.map((offer) => offer.id);
   const filteredOffers = offers.filter((id) => availableOfferIds.includes(id));
-  const {name, description, pictures} = destinationModel.getDestinationById(destination);
+  const { name, description, pictures } = destinationModel.getDestinationById(destination);
   const deleteText = isDeleting ? 'Deleting...' : 'Delete';
-
   return `
-      <li class="trip-events__item">
+            <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -96,24 +96,24 @@ function createFormTemplate(state, offerModel, destinationModel, isNewPoint){
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
                     <datalist id="destination-list-1">
-                      ${destinationModel.destinations.map((dest)=>`<option value="${dest.name}"></option>`)}
+                    ${destinationModel.destinations.map((dest) => `<option value="${dest.name}"></option>`)}
                     </datalist>
                   </div>
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
                     <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"
-                    value="${humanizeDate(dateTo, 'DD/MM/YY HH:mm')}" ${isDisabled ? 'disabled' : ''}>
-                    —
+                    value="${humanizeDate(dateFrom, 'DD/MM/YY HH:mm')}" ${isDisabled ? 'disabled' : ''}>
+                    &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
                     <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time"
-                    value="${humanizeDate(dateFrom, 'DD/MM/YY HH:mm')}" ${isDisabled ? 'disabled' : ''}>
+                    value="${humanizeDate(dateTo, 'DD/MM/YY HH:mm')}" ${isDisabled ? 'disabled' : ''}>
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
                     <label class="event__label" for="event-price-1">
                       <span class="visually-hidden">Price</span>
-                      €
+                      &euro;
                     </label>
                     <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
                   </div>
@@ -125,49 +125,49 @@ function createFormTemplate(state, offerModel, destinationModel, isNewPoint){
                   </button>` : ''}
                 </header>
                 <section class="event__details">
-                ${allOffers?.length > 0 ? `
+                  ${allOffers?.length > 0 ? `
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
                     <div class="event__available-offers">
                     ${allOffers.map((offer) => `
-                    <div class="event__offer-selector">
+                      <div class="event__offer-selector">
                         <input class="event__offer-checkbox visually-hidden"
-                         id="event-offer-${offer.id}-1"
-                         type="checkbox"
-                         name="event-offer-${offer.id}"
-                         ${filteredOffers.includes(offer.id) ? 'checked' : ''}
-                         data-offer-id="${offer.id}" ${isDisabled ? 'disabled' : ''}>
-                         <label class="event__offer-label" for="event-offer-${offer.id}-1">
+                        id="event-offer-${offer.id}-1"
+                        type="checkbox"
+                        name="event-offer-${offer.id}"
+                        ${filteredOffers.includes(offer.id) ? 'checked' : ''}
+                        data-offer-id="${offer.id}" ${isDisabled ? 'disabled' : ''}>
+                        <label class="event__offer-label" for="event-offer-${offer.id}-1">
                           <span class="event__offer-title">${offer.title}</span>
-                          +€&nbsp;
+                          &plus;&euro;&nbsp;
                           <span class="event__offer-price">${offer.price}</span>
                         </label>
-                    </div>
-  `).join('')}
+                      </div>
+                    `).join('')}
                     </div>
                   </section>` : ''}
                   ${(description || pictures?.length > 0) ? `
                   <section class="event__section  event__section--destination">
-                  ${description && `
-                  <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                  <p class="event__destination-description">${description}</p>
-                  `}
+                    ${description && `
+                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                    <p class="event__destination-description">${description}</p>
+                    `}
                   ${pictures?.length > 0 ? `
-                       <div class="event__photos-container">
-                         <div class="event__photos-tape">
-                           ${pictures.map((picture) => `
-                             <img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
-                         </div>
-                       </div>
-                     ` : ''}
-                   </section>` : ''}
+                      <div class="event__photos-container">
+                        <div class="event__photos-tape">
+                          ${pictures.map((picture) => `
+                            <img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+                        </div>
+                      </div>
+                    ` : ''}
+                  </section>` : ''}
                 </section>
               </form>
             </li>
   `;
 }
 
-export default class EditForm extends AbstractStatefulView{
+export default class EditFormView extends AbstractStatefulView{
   #allOffers;
   #allDestination;
   #onFormSubmit;
@@ -252,7 +252,7 @@ export default class EditForm extends AbstractStatefulView{
 
   #onFormStateSubmit = (evt) => {
     evt.preventDefault();
-    const point = EditForm.parseStateToPoint(this._state);
+    const point = EditFormView.parseStateToPoint(this._state);
     if (isNaN(point.basePrice) || point.basePrice <= 0 || !this._state.dateTo || !this._state.dateFrom
     || new Date(this._state.dateFrom) >= new Date(this._state.dateTo) || !point.destination) {
       this.shake();
@@ -290,7 +290,7 @@ export default class EditForm extends AbstractStatefulView{
     if (this.#isNewPoint) {
       this.#onDeletePoint();
     } else {
-      this.#onDeletePoint(EditForm.parseStateToPoint(this._state));
+      this.#onDeletePoint(EditFormView.parseStateToPoint(this._state));
     }
   };
 

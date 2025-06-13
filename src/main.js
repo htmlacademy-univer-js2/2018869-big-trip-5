@@ -11,7 +11,7 @@ import OffersApiService from './api/offer-api-service';
 import DestinationsApiService from './api/destination-api-service';
 import RoutePresenter from './presenter/route-presenter';
 
-const AUTHORIZATION = 'Basic er883jdzbdw702';
+const AUTHORIZATION = 'Basic er883jdzbd02';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 const siteHeaderFiltersElement = document.querySelector('.trip-controls__filters');
 const siteBodySortElement = document.querySelector('.trip-events');
@@ -38,6 +38,7 @@ const mainPresenter = new MainPresenter(
   filterModel,
   onNewPointFormClose
 );
+
 const newPointButtonComponent = new NewPointView(onNewPointButtonClick);
 
 function onNewPointFormClose() {

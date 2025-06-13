@@ -1,5 +1,6 @@
 import { UpdateType } from '../const/const';
 import Observable from '../framework/observable';
+
 const FIRST_ELEMENT = 0;
 
 export default class OfferModel extends Observable {

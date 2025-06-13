@@ -1,6 +1,6 @@
 import {remove, render, RenderPosition} from '../framework/render.js';
 import {UserAction, UpdateType} from '../const/const';
-import EditFormView from '../view/edit-form-view';
+import EditForm from '../view/edit-form-view';
 import {OnEscKeyDown} from '../utils/utils';
 
 export default class NewPointPresenter {
@@ -30,7 +30,7 @@ export default class NewPointPresenter {
       isFavorite: false
     };
 
-    this.#pointEditComponent = new EditFormView(
+    this.#pointEditComponent = new EditForm(
       blankPoint,
       offerModel,
       destinationModel,

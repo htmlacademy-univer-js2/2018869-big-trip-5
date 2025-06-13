@@ -1,7 +1,7 @@
-import Sort from '../view/sort-view';
+import SortView from '../view/sort-view';
 import {render, RenderPosition, remove } from '../framework/render';
 import {sortPointByDay, sortPointByTime} from '../utils/utils';
-import EmptyList from '../view/empty-list-view';
+import EmptyListView from '../view/empty-list-view';
 import PointPresenter from './point-presenter';
 import {filter} from '../utils/filter';
 import NewPointPresenter from './new-point-presenter';
@@ -36,6 +36,7 @@ export default class MainPresenter {
     const tripEventsList = document.createElement('ul');
     tripEventsList.className = 'trip-events__list';
     container.appendChild(tripEventsList);
+
     this.#bigContainer = container;
     this.#listContainer = tripEventsList;
     this.#pointModel = pointModel;
@@ -66,7 +67,7 @@ export default class MainPresenter {
       return;
     }
     this.#actualSortType = changeSortType;
-    this.#clearPointList({resetRenderedPointCount:true});
+    this.#clearPointList({resetRenderedPointCount: true});
     this.#renderPoints();
   };
 
@@ -74,7 +75,7 @@ export default class MainPresenter {
     if (this.#sortComponent) {
       remove(this.#sortComponent);
     }
-    this.#sortComponent = new Sort({ currentSortType: this.#actualSortType, onSortTypeChange: this.#onSortTypeChange });
+    this.#sortComponent = new SortView({ currentSortType: this.#actualSortType, onSortTypeChange: this.#onSortTypeChange });
     render(this.#sortComponent, this.#bigContainer, RenderPosition.AFTERBEGIN);
   }
 
@@ -86,7 +87,7 @@ export default class MainPresenter {
 
     const pointsCount = this.points.length;
     if (pointsCount === 0) {
-      render(new EmptyList(this.#filterModel.filter), this.#listContainer, RenderPosition.AFTEREND);
+      render(new EmptyListView(this.#filterModel.filter), this.#listContainer, RenderPosition.AFTEREND);
       return;
     }
     this.#renderSort();
@@ -188,7 +189,7 @@ export default class MainPresenter {
         filteredPoints.sort(sortPointByTime);
         break;
       case SortType.PRICE:
-        filteredPoints.sort((a,b)=>b.price - a.price);
+        filteredPoints.sort((a,b)=>b.basePrice - a.basePrice);
         break;
     }
     return filteredPoints;
