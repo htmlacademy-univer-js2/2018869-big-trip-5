@@ -62,7 +62,7 @@ function createPointTemplate(pointModel, offerModel, destinationModel) {
   `;
 }
 
-export default class Point extends AbstractView{
+export default class PointView extends AbstractView{
   #pointModel;
   #offerModel;
   #destinationModel;
