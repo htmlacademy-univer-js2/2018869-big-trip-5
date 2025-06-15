@@ -11,6 +11,14 @@ export default class PointModel extends Observable {
     this.#pointsApiService = pointsApiService;
   }
 
+  get points() {
+    return this.#points;
+  }
+
+  get isLoaded() {
+    return this.#isLoaded;
+  }
+
   async init() {
     try {
       const points = await this.#pointsApiService.points;
@@ -20,14 +28,6 @@ export default class PointModel extends Observable {
     }
     this.#isLoaded = true;
     this._notify(UpdateType.INIT);
-  }
-
-  get points() {
-    return this.#points;
-  }
-
-  get isLoaded() {
-    return this.#isLoaded;
   }
 
   async updatePoints(updateType, update) {
