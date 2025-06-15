@@ -39,17 +39,52 @@ export default class MainPresenter {
 
     this.#bigContainer = container;
     this.#listContainer = tripEventsList;
+
     this.#pointModel = pointModel;
     this.#offerModel = offerModel;
     this.#filterModel = filterModel;
     this.#destinationModel = destinationModel;
+
     this.#pointModel.addObserver(this.#onModelEvent);
+    this.#offerModel.addObserver(this.#onModelEvent);
+    this.#destinationModel.addObserver(this.#onModelEvent);
     this.#filterModel.addObserver(this.#onModelEvent);
+
     this.#newPointPresenter = new NewPointPresenter(
       tripEventsList,
       this.#onViewAction,
       onNewPointDestroy
     );
+  }
+
+  get points(){
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointModel.points;
+    const filteredPoints = filter[filterType](points);
+    switch(this.#actualSortType){
+      case SortType.DAY:
+        filteredPoints.sort(sortPointByDay);
+        break;
+      case SortType.TIME:
+        filteredPoints.sort(sortPointByTime);
+        break;
+      case SortType.PRICE:
+        filteredPoints.sort((a,b)=>b.basePrice - a.basePrice);
+        break;
+    }
+    return filteredPoints;
+  }
+
+  get offerModel(){
+    return this.#offerModel;
+  }
+
+  get destinationModel(){
+    return this.#destinationModel;
+  }
+
+  get container(){
+    return this.#listContainer;
   }
 
   init(){
@@ -175,35 +210,5 @@ export default class MainPresenter {
 
   #renderLoading() {
     render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
-  }
-
-  get points(){
-    const filterType = this.#filterModel.filter;
-    const points = this.#pointModel.points;
-    const filteredPoints = filter[filterType](points);
-    switch(this.#actualSortType){
-      case SortType.DAY:
-        filteredPoints.sort(sortPointByDay);
-        break;
-      case SortType.TIME:
-        filteredPoints.sort(sortPointByTime);
-        break;
-      case SortType.PRICE:
-        filteredPoints.sort((a,b)=>b.basePrice - a.basePrice);
-        break;
-    }
-    return filteredPoints;
-  }
-
-  get offerModel(){
-    return this.#offerModel;
-  }
-
-  get destinationModel(){
-    return this.#destinationModel;
-  }
-
-  get container(){
-    return this.#listContainer;
   }
 }

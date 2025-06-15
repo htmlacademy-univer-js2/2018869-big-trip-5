@@ -304,6 +304,10 @@ export default class EditFormView extends AbstractStatefulView{
     });
   };
 
+  resetToInitialState() {
+    this.updateElement(this.parsePointToState(this.#initialPoint));
+  }
+
   parsePointToState(point){
     return{
       ...point,
@@ -319,9 +323,5 @@ export default class EditFormView extends AbstractStatefulView{
     delete point.isSaving;
     delete point.isDeleting;
     return point;
-  }
-
-  resetToInitialState() {
-    this.updateElement(this.parsePointToState(this.#initialPoint));
   }
 }
